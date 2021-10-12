@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class SellerProduct extends Controller
@@ -14,7 +15,7 @@ class SellerProduct extends Controller
      */
     public function index()
     {
-        //
+        $userId = auth('sanctum')->user()->id;
     }
 
     /**
@@ -25,7 +26,24 @@ class SellerProduct extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userId = auth('sanctum')->user()->id;
+
+        $rules = [
+            'product_name' => 'required|string|min:3',
+            'stock' => 'required|integer|min:1',
+            'available' => 'required|boolean',
+            'price' => 'required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/'
+        ];
+
+        $this->validate($request, $rules);
+
+        $product = Product::create([
+            'product_name' => $request->product_name,
+            'stock' => $request->stock,
+            'available' => $request->available,
+            'ref_seller' => $userId,
+            'price' => $request->price,
+        ]);
     }
 
     /**
