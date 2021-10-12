@@ -21,7 +21,7 @@ class SellerProduct extends ApiController
         $userId = auth('sanctum')->user()->id;
         $user = User::findOrFail($userId);
         try{
-            $data = $user->with('product')->get();
+            $data = $user->with('product')->first();
         }catch(Exception $e){
             return response()->json(['date' => $e->getMessage()]);
         }
