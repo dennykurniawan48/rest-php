@@ -19,9 +19,11 @@ class CreateProductsTable extends Migration
             $table->integer('stock');
             $table->boolean('available')->default(true);
             $table->unsignedBigInteger('ref_seller');
+            $table->unsignedBigInteger('ref_category');
             $table->double('price');
             $table->boolean('blocked')->default(false);
             $table->foreign('ref_seller')->references('id')->on('users');
+            $table->foreign('ref_category')->references('id')->on('categories');
             $table->timestamps();
         });
     }
