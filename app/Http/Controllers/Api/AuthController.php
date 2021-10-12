@@ -55,7 +55,11 @@ class AuthController extends ApiController
        return $this->showOne($dataUser, Response::HTTP_OK);
    }
 
-   public function verifyuser(Request $request){
-
+   public function verifyuser($token){
+        $user = User::where('verified_token', $token)->firstOrFail();
+        $user->email_verified_at = \Carbon\Carbon::now();
+        $user->verified_token = null;
+        $user->save();
+        return $this->showOne($user, Response::HTTP_OK);
    }
 }
