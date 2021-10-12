@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Str;
 
 class AuthController extends ApiController
 {
@@ -24,6 +25,7 @@ class AuthController extends ApiController
         'first_name' => $request->first_name,
         'last_name' => $request->last_name,
         'email' => $request->email,
+        'verified_token' => Str::random(30),
         'password' => bcrypt($request->password)
        ]);
 
@@ -51,5 +53,9 @@ class AuthController extends ApiController
        $dataUser->token = $token;
 
        return $this->showOne($dataUser, Response::HTTP_OK);
+   }
+
+   public function verifyuser(Request $request){
+
    }
 }

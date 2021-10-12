@@ -12,6 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $appends = ['isverified'];
     /**
      * The attributes that are mass assignable.
      *
@@ -21,8 +22,13 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
+        'verified_token',
         'password',
     ];
+
+    protected function getIsVerifiedAttribute(){
+        return $this->email_verified_at != null;
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -31,7 +37,8 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'verified_token',
+        'email_verified_at'
     ];
 
     /**
@@ -40,6 +47,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at' => 'datetime'
     ];
 }
