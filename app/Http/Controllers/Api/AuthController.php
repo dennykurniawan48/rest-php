@@ -12,10 +12,10 @@ class AuthController extends ApiController
 {
    public function register(Request $request){
        $rules = [
-           'first_name' => 'required',
-           'last_name' => 'required',
-           'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6'
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6'
        ];
 
        $this->validate($request, $rules);
