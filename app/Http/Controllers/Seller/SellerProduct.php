@@ -20,15 +20,21 @@ class SellerProduct extends ApiController
     {
         $userId = auth('sanctum')->user()->id;
         $user = User::findOrFail($userId);
+       
+        return $this->showOne($user, Response::HTTP_OK);
+    }
+
+    public function listproduct(){
+        $userId = auth('sanctum')->user()->id;
+        $user = User::findOrFail($userId);
         try{
-            $data = $user->with('product')->first();
+            $data = $user->product;
         }catch(Exception $e){
             return response()->json(['date' => $e->getMessage()]);
         }
         
-        
-        return response()->json(['date' => $data]);
-        // return $this->showOne($data, Response::HTTP_OK);
+       // return response()->json(['date' => $data]);
+        return $this->showAll($data, Response::HTTP_OK);
     }
 
     /**

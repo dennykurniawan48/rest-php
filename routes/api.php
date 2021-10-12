@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\ManageProduct;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Seller\SellerProduct;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +21,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::name('verify')->get('/verify/{token}', [AuthController::class, 'verifyuser']);
 Route::middleware('auth:sanctum', 'blocked', 'validseller')->group(function(){
     Route::resource('/seller/product', SellerProduct::class);
+    Route::get('/seller/productlist', [SellerProduct::class, 'listproduct']);
 });
 
 Route::middleware('auth:sanctum')->group(function(){
