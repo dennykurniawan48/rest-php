@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Product;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,6 +19,16 @@ class SellerProduct extends ApiController
     public function index()
     {
         $userId = auth('sanctum')->user()->id;
+        $user = User::findOrFail($userId);
+        try{
+            $data = $user->with('product')->get();
+        }catch(Exception $e){
+            return response()->json(['date' => $e->getMessage()]);
+        }
+        
+        
+        return response()->json(['date' => $data]);
+        // return $this->showOne($data, Response::HTTP_OK);
     }
 
     /**
@@ -59,7 +71,8 @@ class SellerProduct extends ApiController
      */
     public function show($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return $this->showOne($product, Response::HTTP_OK);
     }
 
     /**
@@ -71,7 +84,34 @@ class SellerProduct extends ApiController
      */
     public function update(Request $request, $id)
     {
-        //
+        $userId = auth('sanctum')->user()->id;
+
+        $product = Product::findOrFail($id);
+
+        if($product->ref_seller != $userId){
+            return $this->errorResponse('Only seller can update product.', Response::HTTP_FORBIDDEN);
+        }
+
+        $rules = [
+            'product_name' => 'required|string|min:3',
+            'stock' => 'required|integer|min:1',
+            'available' => 'required|boolean',
+            'price' => 'required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
+            'category' => 'required|integer|exists:categories,id'
+        ];
+
+        $this->validate($request, $rules);
+
+        $product->product_name = $request->product_name;
+        $product->stock = $request->stock;
+        $product->available = $request->available;
+        $product->ref_seller = $userId;
+        $product->ref_category = $request->category;
+        $product->price = $request->price;
+
+        $product->save();
+
+        return $this->showOne($product, Response::HTTP_OK);
     }
 
     /**
@@ -82,6 +122,16 @@ class SellerProduct extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $userId = auth('sanctum')->user()->id;
+
+        $product = Product::findOrFail($id);
+
+        if($product->ref_seller != $userId){
+            return $this->errorResponse('Only seller can update product.', Response::HTTP_FORBIDDEN);
+        }
+
+        $product->delete();
+
+        return $this->showOne($product, Response::HTTP_OK);
     }
 }

@@ -18,5 +18,10 @@ class Product extends Model
         'price',
     ];
 
+    public function seller()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
 }
