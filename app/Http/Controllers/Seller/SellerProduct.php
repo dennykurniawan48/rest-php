@@ -20,22 +20,15 @@ class SellerProduct extends ApiController
     {
         $userId = auth('sanctum')->user()->id;
         $user = User::findOrFail($userId);
-       
-        return $this->showOne($user, Response::HTTP_OK);
-    }
-
-    public function listproduct(){
-        $userId = auth('sanctum')->user()->id;
-        $user = User::findOrFail($userId);
         try{
             $data = $user->product;
         }catch(Exception $e){
             return response()->json(['date' => $e->getMessage()]);
         }
         
-       // return response()->json(['date' => $data]);
         return $this->showAll($data, Response::HTTP_OK);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -77,7 +70,13 @@ class SellerProduct extends ApiController
      */
     public function show($id)
     {
+        $userId = auth('sanctum')->user()->id;
         $product = Product::findOrFail($id);
+        
+        if($product->ref_seller != $userId){
+            return $this->errorResponse('Only seller can update product.', Response::HTTP_FORBIDDEN);
+        }
+
         return $this->showOne($product, Response::HTTP_OK);
     }
 

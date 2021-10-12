@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class ManageCategory extends Controller
+class ManageCategory extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,8 @@ class ManageCategory extends Controller
      */
     public function index()
     {
-        //
+        $category = Category::all();
+        return $this->showAll($category, Response::HTTP_OK);
     }
 
     /**
