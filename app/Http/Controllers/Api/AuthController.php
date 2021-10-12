@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthController extends Controller
+class AuthController extends ApiController
 {
    public function register(Request $request){
        $rules = [
@@ -20,14 +20,14 @@ class AuthController extends Controller
 
        $this->validate($request, $rules);
 
-       User::create([
+       $user = User::create([
         'first_name' => $request->first_name,
         'last_name' => $request->last_name,
         'email' => $request->email,
         'password' => bcrypt($request->password)
        ]);
 
-       return response()->json(['success', 'success creating user'], Response::HTTP_CREATED);
+       return $this->showOne($user, Response::HTTP_OK);
    }
 
    public function login(Request $request){
@@ -39,13 +39,17 @@ class AuthController extends Controller
        $this->validate($request, $rules);
 
        if(!Auth::attempt($request->only('email', 'password'))){
-           return response()->json(['error', 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
+           return $this->errorResponse('Invalid credentials', Response::HTTP_UNAUTHORIZED);
        }
 
        $user = Auth::user();
 
        $token = $user->createToken('token')->plainTextToken;
 
-       return response()->json(['success' => 'Succesfully login', 'message' => $token], Response::HTTP_UNAUTHORIZED);
+       $dataUser = User::findOrFail($user->id);
+
+       $dataUser->token = $token;
+
+       return $this->showOne($dataUser, Response::HTTP_OK);
    }
 }
