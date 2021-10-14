@@ -21,6 +21,10 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('ref_seller');
             $table->unsignedBigInteger('ref_category');
             $table->double('price');
+            $table->string('main_image');
+            $table->string('front_image')->nullable();
+            $table->string('back_image')->nullable();
+            $table->string('side_image')->nullable();
             $table->boolean('blocked')->default(false);
             $table->foreign('ref_seller')->references('id')->on('users');
             $table->foreign('ref_category')->references('id')->on('categories');

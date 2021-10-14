@@ -16,6 +16,7 @@ class Product extends Model
         'ref_seller',
         'ref_category',
         'price',
+        'main_image'
     ];
 
     public function seller()

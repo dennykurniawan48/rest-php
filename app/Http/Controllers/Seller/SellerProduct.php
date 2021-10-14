@@ -45,16 +45,22 @@ class SellerProduct extends ApiController
             'stock' => 'required|integer|min:1',
             'available' => 'required|boolean',
             'price' => 'required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
-            'category' => 'required|integer|exists:categories,id'
+            'category' => 'required|integer|exists:categories,id',
+            'main_image' => 'required|image|mimes:jpeg,png,jpg|max:512',
+            // 'front_image' => 'image|mimes:jpeg,png,jpg|max:512',
+            // 'back_image' => 'image|mimes:jpeg,png,jpg|max:512',
+            // 'side_image' => 'image|mimes:jpeg,png,jpg|max:512',
         ];
 
-        $this->validate($request, $rules);
+        $image = $request->file('main_image');
+        $image_uploaded_path = $image->store('', 'public');
 
         $product = Product::create([
             'product_name' => $request->product_name,
             'stock' => $request->stock,
             'available' => $request->available,
             'ref_seller' => $userId,
+            'main_image' => '/storage/' . $image_uploaded_path,
             'ref_category' => $request->category,
             'price' => $request->price,
         ]);
