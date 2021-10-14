@@ -60,7 +60,7 @@ class SellerProduct extends ApiController
             'stock' => $request->stock,
             'available' => $request->available,
             'ref_seller' => $userId,
-            'main_image' => '/storage/' . $image_uploaded_path,
+            'main_image' => 'storage/' . $image_uploaded_path,
             'ref_category' => $request->category,
             'price' => $request->price,
         ]);
