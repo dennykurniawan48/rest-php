@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::get('products', [Product::class, 'index']);
+Route::get('products/{id}', [Product::class, 'show']);
 Route::get('categories', [ManageCategory::class, 'index']);
 Route::name('verify')->get('/verify/{token}', [AuthController::class, 'verifyuser']);
 

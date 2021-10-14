@@ -41,7 +41,8 @@ class Product extends ApiController
      */
     public function show($id)
     {
-        //
+        $product = ModelsProduct::findOrFail($id);
+        return $this->showOne($product, Response::HTTP_OK);
     }
 
     /**
