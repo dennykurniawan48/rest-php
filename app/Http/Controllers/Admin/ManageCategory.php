@@ -28,7 +28,17 @@ class ManageCategory extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'name' => 'required|min:3'
+        ];
+
+        $this->validate($request, $rules);
+
+        $category = Category::create([
+            'name' => $request->name
+        ]);
+
+        return $this->showOne($category, Response::HTTP_OK);
     }
 
     /**
