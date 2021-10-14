@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\ManageCategory;
 use App\Http\Controllers\Admin\ManageProduct;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Product;
 use App\Http\Controllers\Seller\SellerProduct;
 use Illuminate\Support\Facades\Route;
 
@@ -18,12 +20,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('products', [Product::class, 'index']);
+Route::get('categories', [ManageCategory::class, 'index']);
 Route::name('verify')->get('/verify/{token}', [AuthController::class, 'verifyuser']);
+
 Route::middleware('auth:sanctum', 'blocked', 'validseller')->group(function(){
     Route::resource('/seller/product', SellerProduct::class);
     Route::get('/seller/productlist', [SellerProduct::class, 'listproduct']);
 });
 
-Route::middleware('auth:sanctum')->group(function(){
-    Route::resource('/admin/product', ManageProduct::class);
+Route::middleware('auth:sanctum', 'validadmin')->group(function(){
+    Route::post('categories', [ManageCategory::class, 'store']);
 });
+

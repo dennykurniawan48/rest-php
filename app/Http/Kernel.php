@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'blocked' => \App\Http\Middleware\CheckBlockedAcount::class,
         'validseller' => \App\Http\Middleware\CheckSellerAccount::class,
+        'validadmin' => \App\Http\Middleware\CheckAdminAccount::class,
     ];
 }
