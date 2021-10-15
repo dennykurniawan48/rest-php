@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Transaction;
 
 class Product extends Model
 {
@@ -24,6 +25,9 @@ class Product extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    
+    public function transaction(){
+        return $this->belongsToMany(Transaction::class);
+    }
 
 }

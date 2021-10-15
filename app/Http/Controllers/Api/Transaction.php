@@ -34,6 +34,12 @@ class Transaction extends ApiController
         $data = [];
         $userId = auth('sanctum')->user()->id;
 
+        $rules = [
+            'address' => 'required|string'
+        ];
+
+        $this->validate($request, $rules);
+
         foreach($request->item as $item){
             $object = new stdClass();
             $product = Product::findOrFail($item["id"]);
@@ -51,10 +57,39 @@ class Transaction extends ApiController
             }if($product->ref_seller == $userId){
                 $object->error = "Sorry, seller can't buy his own product.";
             }
+
+            if($object->error != ""){
+                return $this->errorResponse("Sorry can't process order", Response::HTTP_BAD_REQUEST);
+            }
             
             array_push($data, $object);
         }
-        return response()->json($data, Response::HTTP_OK);
+
+        $transaction = ModelsTransaction::create([
+            'ref_buyer' => $userId,
+            'code_transaction' => 'INV-'.rand(10000, 100000),
+            'address' => $request->address
+        ]);
+
+        $dataProduct = [];
+
+        foreach($data as $d){
+            $object = new stdClass();
+            $product = Product::findOrFail($d->id);
+            $object->product_id = $product->id;
+            $object->transaction_id = $transaction->id;
+            $object->price = $d->price;
+            $object->qty = $d->qty;
+            $dataProduct[] = (array)$object;
+
+            // reduce product quantity
+            $product->stock = $product->stock - $d->qty;
+            $product->save();
+        }
+
+       $transaction->products()->sync($dataProduct);
+        
+        return response()->json($dataProduct, Response::HTTP_OK);
     }
 
     /**

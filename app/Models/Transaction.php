@@ -11,8 +11,11 @@ class Transaction extends Model
 
     protected $fillable = [
         'code_transaction',
-        'ref_seller',
         'ref_buyer',
-        'ref_product'
+        'address'
     ];
+
+    public function products(){
+        return $this->belongsToMany(Product::class);
+    }
 }

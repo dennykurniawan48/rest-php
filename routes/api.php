@@ -26,12 +26,13 @@ Route::get('products/{id}', [Product::class, 'show']);
 Route::get('categories', [ManageCategory::class, 'index']);
 Route::name('verify')->get('/verify/{token}', [AuthController::class, 'verifyuser']);
 
-
+Route::middleware('auth:sanctum', 'blocked')->group(function(){
+    Route::post('transaction', [Transaction::class, 'store']);
+});
 
 Route::middleware('auth:sanctum', 'blocked', 'validseller')->group(function(){
     Route::resource('/seller/product', SellerProduct::class);
     Route::get('/seller/productlist', [SellerProduct::class, 'listproduct']);
-    Route::post('transaction', [Transaction::class, 'store']);
 });
 
 Route::middleware('auth:sanctum', 'validadmin')->group(function(){

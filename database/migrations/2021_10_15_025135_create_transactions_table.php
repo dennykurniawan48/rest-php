@@ -16,12 +16,10 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('code_transaction');
-            $table->unsignedBigInteger('ref_seller');
             $table->unsignedBigInteger('ref_buyer');
             $table->string('address');
             $table->timestamps();
 
-            $table->foreign('ref_seller')->references('id')->on('users');
             $table->foreign('ref_buyer')->references('id')->on('users');
         });
     }
