@@ -28,6 +28,7 @@ Route::name('verify')->get('/verify/{token}', [AuthController::class, 'verifyuse
 
 Route::middleware('auth:sanctum', 'blocked')->group(function(){
     Route::post('transaction', [Transaction::class, 'store']);
+    Route::post('checkout', [Transaction::class, 'checkout']);
 });
 
 Route::middleware('auth:sanctum', 'blocked', 'validseller')->group(function(){
