@@ -47,6 +47,7 @@ class SellerProduct extends ApiController
             'price' => 'required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
             'category' => 'required|integer|exists:categories,id',
             'main_image' => 'required|image|mimes:jpeg,png,jpg|max:512',
+            'description' => 'required|string|min:10|max:1000'
             // 'front_image' => 'image|mimes:jpeg,png,jpg|max:512',
             // 'back_image' => 'image|mimes:jpeg,png,jpg|max:512',
             // 'side_image' => 'image|mimes:jpeg,png,jpg|max:512',
@@ -63,6 +64,7 @@ class SellerProduct extends ApiController
             'main_image' => 'storage/' . $image_uploaded_path,
             'ref_category' => $request->category,
             'price' => $request->price,
+            'description' => $request->description
         ]);
 
         return $this->showOne($product, Response::HTTP_CREATED);

@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('ref_category');
             $table->double('price');
             $table->string('main_image');
+            $table->string('description');
             $table->string('front_image')->nullable();
             $table->string('back_image')->nullable();
             $table->string('side_image')->nullable();
