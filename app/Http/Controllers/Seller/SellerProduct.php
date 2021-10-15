@@ -53,6 +53,8 @@ class SellerProduct extends ApiController
             // 'side_image' => 'image|mimes:jpeg,png,jpg|max:512',
         ];
 
+        $this->validate($request, $rules);
+
         $image = $request->file('main_image');
         $image_uploaded_path = $image->store('', 'public');
 

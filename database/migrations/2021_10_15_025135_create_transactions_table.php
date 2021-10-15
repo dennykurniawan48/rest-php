@@ -18,12 +18,11 @@ class CreateTransactionsTable extends Migration
             $table->string('code_transaction');
             $table->unsignedBigInteger('ref_seller');
             $table->unsignedBigInteger('ref_buyer');
-            $table->unsignedBigInteger('ref_product');
+            $table->string('address');
             $table->timestamps();
 
             $table->foreign('ref_seller')->references('id')->on('users');
             $table->foreign('ref_buyer')->references('id')->on('users');
-            $table->foreign('ref_product')->references('id')->on('products');
         });
     }
 
