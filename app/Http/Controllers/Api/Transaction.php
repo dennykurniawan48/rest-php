@@ -35,7 +35,8 @@ class Transaction extends ApiController
         $userId = auth('sanctum')->user()->id;
 
         $rules = [
-            'address' => 'required|string'
+            'address' => 'required|string',
+            'name' => 'required|string'
         ];
 
         $this->validate($request, $rules);
@@ -68,7 +69,8 @@ class Transaction extends ApiController
         $transaction = ModelsTransaction::create([
             'ref_buyer' => $userId,
             'code_transaction' => 'INV-'.rand(10000, 100000),
-            'address' => $request->address
+            'address' => $request->address,
+            'name' => $request->address
         ]);
 
         $dataProduct = [];
@@ -89,7 +91,7 @@ class Transaction extends ApiController
 
        $transaction->products()->sync($dataProduct);
         
-        return response()->json($dataProduct, Response::HTTP_OK);
+        return response()->json($transaction, Response::HTTP_OK);
     }
 
     public function checkout(Request $request)

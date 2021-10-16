@@ -18,6 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->string('code_transaction');
             $table->unsignedBigInteger('ref_buyer');
             $table->string('address');
+            $table->string('name');
             $table->timestamps();
 
             $table->foreign('ref_buyer')->references('id')->on('users');
