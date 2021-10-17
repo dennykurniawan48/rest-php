@@ -94,6 +94,14 @@ class Transaction extends ApiController
         return response()->json($transaction, Response::HTTP_OK);
     }
 
+    public function show($id){
+        $transaction = ModelsTransaction::where('code_transaction', '=', $id)->with('products')->first();
+        if(!$transaction){
+            abort(404);
+        }
+        return response()->json($transaction);
+    }
+
     public function checkout(Request $request)
     {
         $data = [];
