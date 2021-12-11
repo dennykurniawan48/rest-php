@@ -90,8 +90,10 @@ class Transaction extends ApiController
         }
 
        $transaction->products()->sync($dataProduct);
+
+       $detailTransaction = ModelsTransaction::where('code_transaction', '=', $transaction->code_transaction)->with('products')->first();
         
-        return response()->json($transaction, Response::HTTP_OK);
+        return response()->json(["data" => $detailTransaction], Response::HTTP_OK);
     }
 
     public function show($id){
@@ -127,6 +129,6 @@ class Transaction extends ApiController
             
             array_push($data, $object);
         }
-        return response()->json($data, Response::HTTP_OK);
+        return response()->json(["data" => $data], Response::HTTP_OK);
     }
 }

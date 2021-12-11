@@ -62,4 +62,10 @@ class AuthController extends ApiController
         $user->save();
         return $this->showOne($user, Response::HTTP_OK);
    }
+
+   public function logout(Request $request){
+        //$request->user()->currentAccessToken()->delete();
+        $user = User::where('id', auth('sanctum')->user()->id)->firstOrFail();
+        return $this->showOne($user, 200);
+   }
 }
